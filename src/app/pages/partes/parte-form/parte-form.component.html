@@ -1,0 +1,103 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '50rem' }"
+  [header]="parteToEdit ? 'Editar Parte' : 'Cadastrar Nova Parte'"
+  (onHide)="hideDialog()"
+>
+  <form [formGroup]="partesForm" (ngSubmit)="onSubmit()">
+    <p-fluid>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="field">
+          <label for="nome" class="mr-2">Nome Completo: </label>
+          <input
+            id="nome"
+            type="text"
+            pInputText
+            formControlName="nome"
+            [ngClass]="{ 'ng-invalid ng-dirty': isFieldInvalid('nome') }"
+            fluid
+          />
+          <p-message
+            severity="error"
+            variant="simple"
+            size="small"
+            *ngIf="isFieldInvalid('nome')"
+            class="p-error"
+          >
+            Nome é obrigatório.
+          </p-message>
+        </div>
+
+        <div class="field">
+          <label for="tipoPessoa" class="mr-2">Tipo de Pessoa: </label>
+          <p-dropdown
+            id="tipoPessoa"
+            [options]="tiposPessoa"
+            formControlName="tipoPessoa"
+          ></p-dropdown>
+        </div>
+
+        <div class="field">
+          <label for="cpfCnpj" class="mr-2">CPF / CNPJ:</label>
+          <p-inputmask
+            id="cpfCnpj"
+            formControlName="cpfCnpj"
+            [mask]="cpfCnpjMask"
+            placeholder="{{ cpfCnpjMask }}"
+            [unmask]="true"
+            [ngClass]="{ 'ng-invalid ng-dirty': isFieldInvalid('cpfCnpj') }"
+          >
+          </p-inputmask>
+
+          @if (isFieldInvalid('cpfCnpj')) {
+          <p-message
+            severity="error"
+            variant="simple"
+            size="small"
+            class="p-error"
+          >
+            O campo é obrigatório e deve ser preenchido completamente.
+          </p-message>
+          }
+        </div>
+
+        <div class="field">
+          <label for="email" class="mr-2">E-mail: </label>
+          <input
+            id="email"
+            type="email"
+            pInputText
+            formControlName="email"
+            [ngClass]="{ 'ng-invalid ng-dirty': isFieldInvalid('email') }"
+            fluid
+          />
+          <p-message
+            severity="error"
+            variant="simple"
+            size="small"
+            *ngIf="isFieldInvalid('email')"
+            class="p-error"
+          >
+            E-mail inválido.
+          </p-message>
+        </div>
+      </div>
+    </p-fluid>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Cancelar"
+        styleClass="p-button-secondary"
+        (click)="hideDialog()"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="{{ parteToEdit ? 'Salvar Alterações' : 'Cadastrar' }}"
+        (onClick)="onSubmit()"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
