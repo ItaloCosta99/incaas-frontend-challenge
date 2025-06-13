@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Button } from 'primeng/button';
-import { Toolbar } from 'primeng/toolbar';
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Button, Toolbar],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    ButtonModule,
+    ToolbarModule,
+  ],
   templateUrl: './app.component.html',
 })
 export class AppComponent {

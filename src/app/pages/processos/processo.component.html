@@ -1,0 +1,100 @@
+<p-toast></p-toast>
+
+<p-card header="Consulta de Processos">
+  <form
+    [formGroup]="searchForm"
+    (ngSubmit)="onSubmit()"
+    class="grid grid-cols-1 md:grid-cols-3 gap-2"
+  >
+    <div class="col-span-1">
+      <span class="p-float-label">
+        <label for="numeroProcesso">Número do Processo</label>
+        <input
+          pInputText
+          id="numeroProcesso"
+          formControlName="numeroProcesso"
+          class="w-full"
+        />
+      </span>
+    </div>
+
+    <div class="col-span-1">
+      <span class="p-float-label">
+        <label for="grau">Grau de Jurisdição</label>
+        <p-dropdown
+          id="grau"
+          formControlName="grau"
+          [options]="grausOptions"
+          [showClear]="true"
+          placeholder="Selecione"
+          class="w-full"
+        ></p-dropdown>
+      </span>
+    </div>
+
+    <div>
+      <span class="p-float-label">
+        <label for="justica">Tipo de Justiça</label>
+        <p-dropdown
+          id="justica"
+          formControlName="justica"
+          [options]="justicasOptions"
+          [showClear]="true"
+          placeholder="Selecione"
+          class="w-full"
+        ></p-dropdown>
+      </span>
+    </div>
+
+    <div class="flex gap-2 align-items-center justify-content-end mt-4">
+      <p-button
+        type="button"
+        label="Limpar"
+        styleClass="p-button-secondary"
+        (onClick)="clearFilters()"
+      ></p-button>
+      <p-button type="submit" label="Pesquisar" [loading]="loading"></p-button>
+    </div>
+  </form>
+
+  <p-table
+    [value]="processos"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [loading]="loading"
+    styleClass="mt-4"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Código da Unidade</th>
+        <th>Classe Judicial</th>
+        <th>Grau</th>
+        <th>Justiça</th>
+        <th>Assuntos Principais</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-processo>
+      <tr>
+        <td>{{ processo.codigoUnidade }}</td>
+        <td>{{ processo.classeJudicial }}</td>
+        <td>{{ processo.grau }}</td>
+        <td>{{ processo.justica }}</td>
+        <td>
+          <ul class="list-none p-0 m-0">
+            <li *ngFor="let assunto of processo.assuntosPrincipais">
+              {{ assunto }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center">
+          Nenhum processo encontrado. Use os filtros acima para pesquisar.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
