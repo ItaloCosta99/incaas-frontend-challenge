@@ -2,6 +2,10 @@
 
 Uma aplicação Angular para consulta e gerenciamento de processos judiciais, integrando com a API pública do CNJ (Conselho Nacional de Justiça).
 
+## Demo
+
+A aplicação está disponível online em: [https://incaas-frontend-challenge.vercel.app/](https://incaas-frontend-challenge.vercel.app/)
+
 ## Funcionalidades
 
 - **Cadastro de Partes**
