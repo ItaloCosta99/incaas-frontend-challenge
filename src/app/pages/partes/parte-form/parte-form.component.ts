@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -32,7 +40,7 @@ import { FluidModule } from 'primeng/fluid';
     FluidModule,
   ],
 })
-export class ParteFormComponent implements OnInit {
+export class ParteFormComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Input() parteToEdit: ParteInteressada | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -58,7 +66,34 @@ export class ParteFormComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['parteToEdit'] && !changes['parteToEdit'].firstChange) {
+      if (this.parteToEdit) {
+        this.partesForm.patchValue(this.parteToEdit);
+        // Update mask based on tipo pessoa
+        this.cpfCnpjMask =
+          this.parteToEdit.tipoPessoa === 'Fisica'
+            ? '999.999.999-99'
+            : '99.999.999/9999-99';
+      } else {
+        this.partesForm.reset({ tipoPessoa: 'Fisica' });
+        this.cpfCnpjMask = '999.999.999-99';
+      }
+    }
+  }
+
   ngOnInit(): void {
+    this.setupFormSubscriptions();
+    if (this.parteToEdit) {
+      this.partesForm.patchValue(this.parteToEdit);
+      this.cpfCnpjMask =
+        this.parteToEdit.tipoPessoa === 'Fisica'
+          ? '999.999.999-99'
+          : '99.999.999/9999-99';
+    }
+  }
+
+  private setupFormSubscriptions(): void {
     this.partesForm.get('tipoPessoa')?.valueChanges.subscribe((value) => {
       if (value === 'Fisica') {
         this.cpfCnpjMask = '999.999.999-99';
@@ -79,10 +114,6 @@ export class ParteFormComponent implements OnInit {
       }
       this.partesForm.get('cpfCnpj')?.updateValueAndValidity();
     });
-
-    if (this.parteToEdit) {
-      this.partesForm.patchValue(this.parteToEdit);
-    }
   }
 
   onSubmit(): void {

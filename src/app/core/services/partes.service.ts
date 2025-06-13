@@ -20,7 +20,7 @@ export class PartesService {
   }
 
   addParte(parte: Omit<ParteInteressada, 'id'>): void {
-    const novaParte = { ...parte, id: Date.now().toString() };
+    const novaParte = { ...parte, id: crypto.randomUUID() };
     this.partes.update((partes) => [...partes, novaParte]);
     this.savePartes();
   }
